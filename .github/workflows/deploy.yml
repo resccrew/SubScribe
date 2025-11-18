@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Clean cache
+        run: npm cache clean --force
+
       - name: Install dependencies
         run: npm install
 
