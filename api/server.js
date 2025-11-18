@@ -2,6 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import { createClient } from '@supabase/supabase-js';
 
+console.log('--- All Environment Variables ---');
+console.log(process.env);
+console.log('-----------------------------');
+
 
 
 
