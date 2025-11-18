@@ -8,7 +8,7 @@ import { createClient } from '@supabase/supabase-js';
 
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8000;
 
 // Supabase-клиент
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -25,8 +25,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // Получение всех подписок для пользователя
-app.get('/api/subscriptions/:userId', async (req, res) => {
+app.get('/subscriptions/:userId', async (req, res) => {
   try {
     const { data: subscriptions, error } = await supabase
       .from('subscriptions')
@@ -43,7 +47,7 @@ app.get('/api/subscriptions/:userId', async (req, res) => {
 });
 
 // Добавление новой подписки
-app.post('/api/subscriptions', async (req, res) => {
+app.post('/subscriptions', async (req, res) => {
   try {
     const { userId, name, price, billingDate, serviceLogo } = req.body;
     const { data, error } = await supabase
@@ -67,7 +71,7 @@ app.post('/api/subscriptions', async (req, res) => {
 });
 
 // Обновление подписки
-app.put('/api/subscriptions/:id', async (req, res) => {
+app.put('/subscriptions/:id', async (req, res) => {
   try {
     const { name, price, billingDate, serviceLogo } = req.body;
     const { data, error } = await supabase
@@ -91,7 +95,7 @@ app.put('/api/subscriptions/:id', async (req, res) => {
 });
 
 // Удаление подписки
-app.delete('/api/subscriptions/:id', async (req, res) => {
+app.delete('/subscriptions/:id', async (req, res) => {
   try {
     const { error } = await supabase
       .from('subscriptions')
