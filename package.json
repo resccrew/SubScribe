@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
+    "heroku-build": "echo 'Build step not required on backend service. Skipping.'",
     "start": "npm run start:api"
   },
   "dependencies": {
