@@ -134,12 +134,12 @@ const handleLogout = async () => {
 }
 
 // Sort by price descending to match the visual hierarchy of the example
-const sortedSubscriptions = computed(() => {
+const sortedSubscriptions = computed<Subscription[]>(() => {
   return [...subscriptions.value].sort((a, b) => b.price - a.price)
 })
 
 // Calculate total monthly cost by normalizing yearly subscriptions
-const totalAMonth = computed(() => {
+const totalAMonth = computed<number>(() => {
   return subscriptions.value.reduce((sum: number, sub: Subscription) => {
     if (sub.cycle === 'monthly') {
       return sum + sub.price;
@@ -164,7 +164,7 @@ const formatDate = (dateString: string | Date) => {
     return `Next on ${new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date)}`;
 }
 
-const getCategoryName = (category?: string) => {
+const getCategoryName = (category?: string): string => {
   const categoryMap: Record<string, string> = {
     streaming: 'Streaming',
     music: 'Music',
@@ -176,7 +176,10 @@ const getCategoryName = (category?: string) => {
     shopping: 'Shopping',
     other: 'Other',
   }
-  return categoryMap[category as keyof typeof categoryMap] || 'Other'
+  if (category && Object.prototype.hasOwnProperty.call(categoryMap, category)) {
+    return categoryMap[category];
+  }
+  return 'Other';
 }
 
 const categoryColorMap: Record<string, string> = {
@@ -191,9 +194,12 @@ const categoryColorMap: Record<string, string> = {
   other: 'hsl(120, 12%, 65%)',
 }
 
-const getCategoryColor = (category?: string) => {
-  const key = category || 'other'
-  return categoryColorMap[key] || 'var(--olive-dark)'
+const getCategoryColor = (category?: string): string => {
+  const key = category || 'other';
+  if (Object.prototype.hasOwnProperty.call(categoryColorMap, key)) {
+    return categoryColorMap[key];
+  }
+  return 'var(--olive-dark)';
 }
 
 

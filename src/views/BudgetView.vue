@@ -53,6 +53,11 @@ import { useAuth } from '@/composables/useAuth'
 import { useSubscriptions } from '@/composables/useSubscriptionsMongo'
 import type { Subscription, Category } from '@/types/subscription'
 
+interface CategoryWithTotal extends Category {
+  total: number;
+  subscriptions: Subscription[];
+}
+
 const { user } = useAuth()
 const { subscriptions, fetchSubscriptions, categories, fetchCategories, createCategory } = useSubscriptions()
 
@@ -76,7 +81,7 @@ const groupedSubscriptions = computed(() => {
   return groups
 })
 
-const categoryTotals = computed(() => {
+const categoryTotals = computed<CategoryWithTotal[]>(() => {
   return categories.value.map((cat: Category) => {
     const subs = groupedSubscriptions.value[cat.name] || []
     const total = subs.reduce((sum, sub) => {
@@ -91,7 +96,7 @@ const categoryTotals = computed(() => {
   })
 })
 
-const getCategoryName = (category?: string) => {
+const getCategoryName = (category?: string): string => {
   const categoryMap: Record<string, string> = {
     streaming: 'Streaming',
     music: 'Music',
@@ -103,7 +108,10 @@ const getCategoryName = (category?: string) => {
     shopping: 'Shopping',
     other: 'Other',
   }
-  return categoryMap[category as keyof typeof categoryMap] || 'Other'
+  if (category && Object.prototype.hasOwnProperty.call(categoryMap, category)) {
+    return categoryMap[category]
+  }
+  return 'Other'
 }
 
 const showAddCategoryModal = ref(false)

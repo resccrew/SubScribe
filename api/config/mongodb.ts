@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 
-const MONGODB_URI = 'mongodb://nikitapravorov:Zs8zFLZ9z6MB4O8cMrvx1Yrui1j-Ae3T8zUJdB6o0-XpPNnq@33e15fab-0050-4188-b111-640c127aeaa2.europe-west4.firestore.goog:443/subscribe?loadBalanced=true&tls=true&authMechanism=SCRAM-SHA-256&retryWrites=false'
+const MONGODB_URI = process.env.MONGODB_URI
 
 let client: MongoClient
 let clientPromise: Promise<MongoClient>

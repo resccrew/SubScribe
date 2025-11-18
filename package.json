@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "dev:api": "tsx api/server.js",
+    "start:api": "tsx api/server.js",
     "dev:full": "run-p dev dev:api",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",

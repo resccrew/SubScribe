@@ -11,7 +11,12 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 3001
 
-app.use(cors())
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || '*',
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 
 // Получить все подписки пользователя
