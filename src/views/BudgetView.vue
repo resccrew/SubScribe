@@ -108,7 +108,7 @@ const getCategoryName = (category?: string): string => {
     shopping: 'Shopping',
     other: 'Other',
   }
-  if (category && Object.prototype.hasOwnProperty.call(categoryMap, category)) {
+    if (category && category in categoryMap) {
     return categoryMap[category]
   }
   return 'Other'

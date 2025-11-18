@@ -176,7 +176,7 @@ const getCategoryName = (category?: string): string => {
     shopping: 'Shopping',
     other: 'Other',
   }
-  if (category && Object.prototype.hasOwnProperty.call(categoryMap, category)) {
+    if (category && category in categoryMap) {
     return categoryMap[category];
   }
   return 'Other';
@@ -196,7 +196,7 @@ const categoryColorMap: Record<string, string> = {
 
 const getCategoryColor = (category?: string): string => {
   const key = category || 'other';
-  if (Object.prototype.hasOwnProperty.call(categoryColorMap, key)) {
+    if (key in categoryColorMap) {
     return categoryColorMap[key];
   }
   return 'var(--olive-dark)';
