@@ -109,7 +109,7 @@ const getCategoryName = (category?: string): string => {
     other: 'Other',
   }
     if (category && category in categoryMap) {
-    return categoryMap[category]
+        return categoryMap[category] ?? 'Other'
   }
   return 'Other'
 }

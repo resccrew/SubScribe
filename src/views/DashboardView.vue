@@ -177,7 +177,7 @@ const getCategoryName = (category?: string): string => {
     other: 'Other',
   }
     if (category && category in categoryMap) {
-    return categoryMap[category];
+        return categoryMap[category] ?? 'Other';
   }
   return 'Other';
 }
@@ -197,7 +197,7 @@ const categoryColorMap: Record<string, string> = {
 const getCategoryColor = (category?: string): string => {
   const key = category || 'other';
     if (key in categoryColorMap) {
-    return categoryColorMap[key];
+        return categoryColorMap[key] ?? 'var(--olive-dark)';
   }
   return 'var(--olive-dark)';
 }
