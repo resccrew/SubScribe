@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "start": "npm run build && tsx api/server.js"
+    "start": "npm run start:api"
   },
   "dependencies": {
     "@firebase/auth": "^1.11.1",
