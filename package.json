@@ -12,6 +12,7 @@
     "start:api": "tsx api/server.js",
     "dev:full": "run-p dev dev:api",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build:vercel": "NODE_OPTIONS=--max-old-space-size=4096 npm run build",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
