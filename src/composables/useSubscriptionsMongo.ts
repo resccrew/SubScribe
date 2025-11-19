@@ -13,6 +13,42 @@ export function useSubscriptions() {
   const error = ref<string | null>(null)
   const categories = ref<Category[]>([])
 
+  const normalizeCategory = (cat: any): Subscription['category'] => {
+    if (!cat) return undefined
+    const s = String(cat).trim().toLowerCase()
+    const map: Record<string, Subscription['category']> = {
+      streaming: 'streaming',
+      video: 'streaming',
+      netflix: 'streaming',
+      hbo: 'streaming',
+      music: 'music',
+      spotify: 'music',
+      applemusic: 'music',
+      games: 'games',
+      game: 'games',
+      gaming: 'games',
+      education: 'education',
+      study: 'education',
+      course: 'education',
+      health: 'health',
+      fitness: 'health',
+      sport: 'health',
+      work: 'work',
+      productivity: 'work',
+      tools: 'work',
+      finance: 'financial',
+      financial: 'financial',
+      bank: 'financial',
+      shopping: 'shopping',
+      shop: 'shopping',
+      store: 'shopping',
+      other: 'other',
+      misc: 'other',
+      miscellaneous: 'other',
+    }
+    return map[s] ?? undefined
+  }
+
   const toSubscription = (doc: any): Subscription => {
     const bd = doc.billingDate ?? doc.billing_date
     const bdDate = bd ? new Date(bd) : undefined
@@ -26,7 +62,7 @@ export function useSubscriptions() {
       cycle: (doc.cycle as 'monthly' | 'yearly') ?? 'monthly',
       billingDate: safeBd as any,
       reminderDays: doc.reminderDays ?? 3,
-      category: doc.category,
+      category: normalizeCategory(doc.category),
       createdAt: doc.createdAt ? new Date(doc.createdAt) : undefined,
       updatedAt: doc.updatedAt ? new Date(doc.updatedAt) : undefined
     }
