@@ -50,7 +50,7 @@ app.get('/subscriptions/:userId', async (req, res) => {
 // Добавление новой подписки
 app.post('/subscriptions', async (req, res) => {
   try {
-    const { userId, name, price, billingDate, serviceLogo, category, cycle, currency, reminderDays } = req.body;
+    const { userId, name, price, billingDate, serviceLogo } = req.body;
     if (useMock) {
       const item = {
         id: String(Date.now()),
@@ -59,10 +59,6 @@ app.post('/subscriptions', async (req, res) => {
         price,
         billing_date: billingDate,
         service_logo: serviceLogo,
-        category,
-        cycle,
-        currency,
-        reminder_days: reminderDays,
       };
       mock.subscriptions.push(item);
       res.status(201).json(item);
@@ -76,10 +72,6 @@ app.post('/subscriptions', async (req, res) => {
         price, 
         billing_date: billingDate, 
         service_logo: serviceLogo,
-        category,
-        cycle,
-        currency,
-        reminder_days: reminderDays,
       }])
       .select()
       .single();
@@ -93,7 +85,7 @@ app.post('/subscriptions', async (req, res) => {
 // Обновление подписки
 app.put('/subscriptions/:id', async (req, res) => {
   try {
-    const { name, price, billingDate, serviceLogo, category, cycle, currency, reminderDays } = req.body;
+    const { name, price, billingDate, serviceLogo } = req.body;
     if (useMock) {
       const idx = mock.subscriptions.findIndex(s => s.id === req.params.id);
       if (idx === -1) return res.status(404).json({ error: 'Not found' });
@@ -104,10 +96,6 @@ app.put('/subscriptions/:id', async (req, res) => {
         price,
         billing_date: billingDate,
         service_logo: serviceLogo,
-        category,
-        cycle,
-        currency,
-        reminder_days: reminderDays,
       };
       mock.subscriptions[idx] = next;
       res.json(next);
@@ -120,10 +108,6 @@ app.put('/subscriptions/:id', async (req, res) => {
         price, 
         billing_date: billingDate, 
         service_logo: serviceLogo,
-        category,
-        cycle,
-        currency,
-        reminder_days: reminderDays,
       })
       .eq('id', req.params.id)
       .select()
