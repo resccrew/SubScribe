@@ -49,7 +49,7 @@ app.get('/subscriptions/:userId', async (req, res) => {
 // Добавление новой подписки
 app.post('/subscriptions', async (req, res) => {
   try {
-    const { userId, name, price, billingDate, serviceLogo } = req.body;
+    const { userId, name, price, billingDate, serviceLogo, category, cycle, currency, reminderDays } = req.body;
     const { data, error } = await supabase
       .from('subscriptions')
       .insert([{ 
@@ -57,7 +57,11 @@ app.post('/subscriptions', async (req, res) => {
         name, 
         price, 
         billing_date: billingDate, 
-        service_logo: serviceLogo 
+        service_logo: serviceLogo,
+        category,
+        cycle,
+        currency,
+        reminder_days: reminderDays,
       }])
       .select()
       .single();
@@ -73,14 +77,18 @@ app.post('/subscriptions', async (req, res) => {
 // Обновление подписки
 app.put('/subscriptions/:id', async (req, res) => {
   try {
-    const { name, price, billingDate, serviceLogo } = req.body;
+    const { name, price, billingDate, serviceLogo, category, cycle, currency, reminderDays } = req.body;
     const { data, error } = await supabase
       .from('subscriptions')
       .update({ 
         name, 
         price, 
         billing_date: billingDate, 
-        service_logo: serviceLogo 
+        service_logo: serviceLogo,
+        category,
+        cycle,
+        currency,
+        reminder_days: reminderDays,
       })
       .eq('id', req.params.id)
       .select()
