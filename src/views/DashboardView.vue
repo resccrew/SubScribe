@@ -63,6 +63,7 @@
           <div class="p-4 space-y-2">
             <p class="text-sm uppercase tracking-widest font-medium" style="color: var(--muted);">Menu</p>
             <router-link to="/settings" @click="toggleMenu" class="menu-item">Settings</router-link>
+            <router-link to="/app-info" @click="toggleMenu" class="menu-item">О приложении</router-link>
             <div class="border-t my-2" style="border-color: var(--border);"></div>
             <button @click="handleLogout" class="menu-item text-left" style="color: var(--accent);">Logout</button>
           </div>
@@ -184,14 +185,14 @@ const getCategoryName = (category?: string): string => {
 }
 
 const categoryColorMap: Record<string, string> = {
-  streaming: 'hsl(120, 12%, 30%)',
-  music: 'hsl(120, 12%, 40%)',
-  games: 'hsl(120, 12%, 50%)',
-  education: 'hsl(120, 12%, 60%)',
-  health: 'hsl(120, 12%, 70%)',
-  work: 'hsl(120, 12%, 35%)',
-  financial: 'hsl(120, 12%, 45%)',
-  shopping: 'hsl(120, 12%, 55%)',
+  streaming: 'hsl(210, 80%, 50%)',
+  music: 'hsl(270, 65%, 55%)',
+  games: 'hsl(0, 70%, 55%)',
+  education: 'hsl(30, 85%, 55%)',
+  health: 'hsl(140, 50%, 45%)',
+  work: 'hsl(190, 60%, 45%)',
+  financial: 'hsl(50, 90%, 50%)',
+  shopping: 'hsl(330, 70%, 55%)',
   other: 'hsl(120, 12%, 65%)',
 }
 
