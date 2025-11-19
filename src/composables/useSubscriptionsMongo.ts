@@ -69,7 +69,7 @@ export function useSubscriptions() {
       cycle: (doc.cycle as 'monthly' | 'yearly') ?? 'monthly',
       billingDate: safeBd as any,
       reminderDays: doc.reminderDays ?? 3,
-      category: normalizeCategory(doc.category ?? doc.name),
+      category: normalizeCategory(doc.serviceLogo ?? doc.service_logo ?? doc.category ?? doc.name),
       createdAt: doc.createdAt ? new Date(doc.createdAt) : undefined,
       updatedAt: doc.updatedAt ? new Date(doc.updatedAt) : undefined
     }
@@ -135,7 +135,7 @@ export function useSubscriptions() {
         name: subscription.name,
         price: subscription.price,
         billingDate: subscription.billingDate instanceof Date ? subscription.billingDate.toISOString() : subscription.billingDate,
-        serviceLogo: undefined,
+        serviceLogo: subscription.category,
       }
       const response = await fetch(`${API_BASE_URL}/subscriptions`, {
         method: 'POST',
@@ -168,7 +168,7 @@ export function useSubscriptions() {
         name: updates.name,
         price: updates.price,
         billingDate: updates.billingDate instanceof Date ? updates.billingDate.toISOString() : updates.billingDate,
-        serviceLogo: undefined,
+        serviceLogo: updates.category,
       }
       const response = await fetch(`${API_BASE_URL}/subscriptions/${id}`, {
         method: 'PUT',
