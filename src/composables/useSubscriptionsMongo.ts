@@ -1,7 +1,11 @@
 import { ref, computed } from 'vue'
 import type { Subscription, Category } from '@/types/subscription'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (
+  typeof window !== 'undefined' && window.location.hostname === 'resccrew.github.io'
+    ? 'https://strict-bellanca-subscribe-b294309e.koyeb.app'
+    : 'http://localhost:8000'
+)
 
 export function useSubscriptions() {
   const subscriptions = ref<Subscription[]>([])
