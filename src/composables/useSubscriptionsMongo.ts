@@ -15,7 +15,7 @@ export function useSubscriptions() {
 
   const normalizeCategory = (cat: any): Subscription['category'] => {
     if (!cat) return undefined
-    const s = String(cat).trim().toLowerCase()
+    const s = String(cat).trim().toLowerCase().replace(/\s+/g, '')
     const map: Record<string, Subscription['category']> = {
       streaming: 'streaming',
       video: 'streaming',
@@ -46,7 +46,9 @@ export function useSubscriptions() {
       misc: 'other',
       miscellaneous: 'other',
     }
-    return map[s] ?? undefined
+    if (map[s]) return map[s]
+    const allowed = new Set<Subscription['category']>(['streaming','music','games','education','health','work','financial','shopping','other'])
+    return allowed.has(s as any) ? (s as Subscription['category']) : undefined
   }
 
   const toSubscription = (doc: any): Subscription => {
@@ -163,7 +165,8 @@ export function useSubscriptions() {
       const index = subscriptions.value.findIndex(sub => sub.id === id)
       if (index !== -1) {
         const { userId, ...rest } = updates as any
-        subscriptions.value[index] = { ...subscriptions.value[index], ...rest }
+        const normalized = toSubscription({ ...subscriptions.value[index], ...rest })
+        subscriptions.value[index] = normalized
       }
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to update subscription'
