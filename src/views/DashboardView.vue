@@ -1,5 +1,13 @@
 <template>
   <div class="min-h-screen p-6" style="background-color: var(--bg-page); color: var(--text-main);" :style="{ transition: 'transform 0.25s ease' }">
+    <div v-if="pageLoading" class="loader-overlay">
+      <div class="loader-inner">
+        <div class="loader-chart">
+          <RadialChart :subscriptions="sortedSubscriptions" />
+        </div>
+        <div class="loader-title">SubScribe</div>
+      </div>
+    </div>
     <!-- Header: Avatar + Menu Icon -->
     <header class="flex justify-between items-center mb-10">
       <div class="w-10 h-10 rounded-full bg-gray-300">
@@ -133,6 +141,7 @@ const editingSubscription = ref<Subscription | null>(null)
 const router = useRouter()
 const isMenuOpen = ref(false)
 const theme = ref<'light' | 'dark'>('light')
+const pageLoading = ref(true)
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
@@ -305,22 +314,34 @@ onMounted(() => {
       subscriptions.value = []
     }
   }, { immediate: true })
+  watch([loading, subscriptions], ([isLoading]) => {
+    if (!isLoading) {
+      setTimeout(() => { pageLoading.value = false }, 400)
+    } else {
+      pageLoading.value = true
+    }
+  }, { immediate: true })
 })
 </script>
 
 <style scoped>
+.loader-overlay { position: fixed; inset: 0; background: var(--bg-page); display: grid; place-items: center; z-index: 60; }
+.loader-inner { display: grid; place-items: center; gap: 12px; }
+.loader-chart { width: 220px; height: 220px; filter: drop-shadow(0 8px 28px rgba(46,58,44,0.18)); }
+.loader-title { font-weight: 700; letter-spacing: 0.02em; color: var(--olive); }
 .drawer-enter-active,
 .drawer-leave-active {
-  transition: transform 0.25s ease, opacity 0.2s ease;
+  transition: opacity 0.25s ease;
 }
 .drawer-enter-from,
 .drawer-leave-to {
   opacity: 0;
 }
-.drawer-enter-from .fixed.right-0,
-.drawer-leave-to .fixed.right-0 {
-  transform: translateX(100%);
-}
+.drawer-panel { transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 360ms ease, opacity 240ms ease; }
+.drawer-enter-from .drawer-panel { transform: translateX(110%); opacity: 0.6; }
+.drawer-enter-to .drawer-panel { transform: translateX(0); opacity: 1; }
+.drawer-leave-from .drawer-panel { transform: translateX(0); opacity: 1; }
+.drawer-leave-to .drawer-panel { transform: translateX(110%); opacity: 0.6; }
 </style>
 <style scoped>
 .drawer-panel { border-left: 1px solid var(--border); border-top-left-radius: 16px; border-bottom-left-radius: 16px; box-shadow: -16px 0 40px rgba(46,58,44,0.15); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
