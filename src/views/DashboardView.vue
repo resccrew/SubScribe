@@ -58,17 +58,30 @@
     
     <!-- Side Drawer Menu -->
     <transition name="drawer">
-      <div v-if="isMenuOpen" class="fixed inset-0 z-50" @click.self="toggleMenu" style="background-color: transparent;">
-        <div class="fixed right-0 top-0 h-full w-28 border-l" style="background-color: var(--bg-page); border-color: var(--border);">
-          <div class="p-4 space-y-2">
-            <p class="text-sm uppercase tracking-widest font-medium" style="color: var(--muted);">Menu</p>
-            <router-link to="/settings" @click="toggleMenu" class="menu-item">Settings</router-link>
-            <router-link to="/app-info" @click="toggleMenu" class="menu-item">App Info</router-link>
-            <button @click="toggleTheme" class="menu-item text-left">Dark Mode: {{ currentThemeLabel }}</button>
-            <div class="border-t my-2" style="border-color: var(--border);"></div>
-            <button @click="handleLogout" class="menu-item text-left" style="color: var(--accent);">Logout</button>
-          </div>
-        </div>
+      <div v-if="isMenuOpen" class="fixed inset-0 z-50" @click.self="toggleMenu" style="background-color: rgba(0,0,0,0.18);">
+        <aside class="fixed right-0 top-0 h-full w-64 drawer-panel" style="background-color: var(--bg-paper); border-color: var(--border);">
+          <div class="menu-header">MENU</div>
+          <nav class="menu-list">
+            <router-link to="/settings" @click="toggleMenu" class="menu-item">
+              <svg class="menu-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 8a4 4 0 1 0 0 8a4 4 0 0 0 0-8m8.14 4a6.14 6.14 0 0 1-.08 1l2.11 1.65a.5.5 0 0 1 .11.66l-2 3.46a.5.5 0 0 1-.62.22l-2.49-1a7.12 7.12 0 0 1-1.73 1l-.38 2.65a.5.5 0 0 1-.5.42h-4a.5.5 0 0 1-.5-.42l-.38-2.65a7.12 7.12 0 0 1-1.73-1l-2.49 1a.5.5 0 0 1-.62-.22l-2-3.46a.5.5 0 0 1 .11-.66L3.94 13a6.14 6.14 0 0 1 0-2L1.83 9.35a.5.5 0 0 1-.11-.66l2-3.46a.5.5 0 0 1 .62-.22l2.49 1a7.12 7.12 0 0 1 1.73-1l.38-2.65a.5.5 0 0 1 .5-.42h4a.5.5 0 0 1 .5.42l.38 2.65a7.12 7.12 0 0 1 1.73 1l2.49-1a.5.5 0 0 1 .62.22l2 3.46a.5.5 0 0 1-.11.66Z"/></svg>
+              <span>Settings</span>
+            </router-link>
+            <router-link to="/app-info" @click="toggleMenu" class="menu-item">
+              <svg class="menu-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M11 17h2v-6h-2v6m1-12A10 10 0 1 0 22 15A10 10 0 0 0 12 5m0 14A8 8 0 1 1 20 11A8 8 0 0 1 12 19m0-8a1 1 0 1 0-1-1a1 1 0 0 0 1 1"/></svg>
+              <span>App Info</span>
+            </router-link>
+            <button @click="toggleTheme" class="menu-item">
+              <svg class="menu-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1m7 10a7 7 0 1 1-7-7a7 7 0 0 1 7 7m-7 9a1 1 0 0 1-1-1v-2a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1M3 13a1 1 0 0 1-1-1v0a1 1 0 1 1 2 0v0a1 1 0 0 1-1 1m18 0a1 1 0 0 1-1-1v0a1 1 0 1 1 2 0v0a1 1 0 0 1-1 1M5.64 6.05a1 1 0 0 1 1.41 0l1.41 1.41a1 1 0 1 1-1.41 1.41L5.64 7.46a1 1 0 0 1 0-1.41m11.3 11.3a1 1 0 0 1 1.41 0l1.41 1.41a1 1 0 0 1-1.41 1.41l-1.41-1.41a1 1 0 0 1 0-1.41"/></svg>
+              <span>Dark Mode</span>
+              <span class="menu-switch" :class="{ on: theme === 'dark' }"><i></i></span>
+            </button>
+          </nav>
+          <div class="menu-sep"></div>
+          <button @click="handleLogout" class="menu-item logout">
+            <svg class="menu-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M14.08 15.59L16.67 13H7v-2h9.67l-2.59-2.59L15.5 7l5 5l-5 5l-1.42-1.41M3 19V5h8v2H5v10h6v2H3Z"/></svg>
+            <span>Logout</span>
+          </button>
+        </aside>
       </div>
     </transition>
     
@@ -310,13 +323,15 @@ onMounted(() => {
 }
 </style>
 <style scoped>
-.menu-item {
-  display: block;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
-}
-.menu-item:hover {
-  background-color: var(--bg-paper-muted);
-}
+.drawer-panel { border-left: 1px solid var(--border); border-top-left-radius: 16px; border-bottom-left-radius: 16px; box-shadow: -16px 0 40px rgba(46,58,44,0.15); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.menu-header { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.menu-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; transition: background-color 0.2s ease, transform 0.2s ease; color: var(--text-main); }
+.menu-item:hover { background-color: var(--bg-surface); transform: translateX(-2px); }
+.menu-icon { width: 20px; height: 20px; color: var(--olive); }
+.menu-switch { margin-left: auto; width: 38px; height: 22px; border-radius: 9999px; background: var(--border); position: relative; }
+.menu-switch i { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 9999px; background: white; transition: transform 200ms ease; }
+.menu-switch.on i { transform: translateX(16px); }
+.menu-sep { height: 1px; background: var(--border); margin: 8px 0; }
+.logout { color: var(--accent); }
 </style>
