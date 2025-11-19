@@ -263,7 +263,7 @@ const closeModal = () => {
 
 const handleSaveSubscription = async (subscription: Omit<Subscription, 'id' | 'userId'>) => {
   try {
-    const uid = user.value?.uid
+    const uid = user.value?.uid || (import.meta.env.DEV ? 'dev-user' : undefined)
     if (!uid) {
       error.value = 'You must be logged in.'
       return
@@ -285,7 +285,7 @@ const handleSaveSubscription = async (subscription: Omit<Subscription, 'id' | 'u
 
 const handleDeleteSubscription = async (id: string) => {
   try {
-    const uid = user.value?.uid
+    const uid = user.value?.uid || (import.meta.env.DEV ? 'dev-user' : undefined)
     if (!uid) {
       error.value = 'You must be logged in.'
       return
@@ -305,10 +305,10 @@ onMounted(() => {
   theme.value = savedTheme
   applyTheme(savedTheme)
   watch(user, (currentUser) => {
-    if (currentUser?.uid) {
-      fetchSubscriptions(currentUser.uid)
+    const uid = currentUser?.uid || (import.meta.env.DEV ? 'dev-user' : undefined)
+    if (uid) {
+      fetchSubscriptions(uid)
     } else {
-      // Clear subscriptions if user logs out
       subscriptions.value = []
     }
   }, { immediate: true })
