@@ -130,12 +130,19 @@ export function useSubscriptions() {
     error.value = null
     
     try {
+      const payload: any = {
+        userId: subscription.userId,
+        name: subscription.name,
+        price: subscription.price,
+        billingDate: subscription.billingDate instanceof Date ? subscription.billingDate.toISOString() : subscription.billingDate,
+        serviceLogo: undefined,
+      }
       const response = await fetch(`${API_BASE_URL}/subscriptions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(subscription),
+        body: JSON.stringify(payload),
       })
       
       if (!response.ok) throw new Error('Failed to create subscription')
@@ -157,12 +164,18 @@ export function useSubscriptions() {
     error.value = null
     
     try {
+      const payload: any = {
+        name: updates.name,
+        price: updates.price,
+        billingDate: updates.billingDate instanceof Date ? updates.billingDate.toISOString() : updates.billingDate,
+        serviceLogo: undefined,
+      }
       const response = await fetch(`${API_BASE_URL}/subscriptions/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updates),
+        body: JSON.stringify(payload),
       })
       
       if (!response.ok) throw new Error('Failed to update subscription')
