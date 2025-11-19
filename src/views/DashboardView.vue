@@ -20,7 +20,7 @@
     <main>
       <!-- Total Spent -->
       <section class="text-center mb-10">
-        <p class="text-sm uppercase tracking-widest font-medium" style="color: var(--muted);">Total a month</p>
+        <p class="text-sm uppercase tracking-widest font-medium" style="color: var(--muted);">Monthly Total</p>
         <p class="text-6xl font-light mt-2" style="font-family: 'Space Grotesk', monospace;">
           <span class="font-sans text-4xl align-middle">$</span>{{ formatPrice(totalAMonth) }}
         </p>
@@ -36,9 +36,9 @@
       <!-- Subscriptions List -->
       <section>
         <div class="space-y-4">
-          <div v-if="loading" class="text-center" style="color: var(--muted);">Загрузка...</div>
+          <div v-if="loading" class="text-center" style="color: var(--muted);">Loading...</div>
           <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
-          <div v-else-if="sortedSubscriptions.length === 0" class="text-center" style="color: var(--muted);">У вас пока нет подписок.</div>
+          <div v-else-if="sortedSubscriptions.length === 0" class="text-center" style="color: var(--muted);">You don't have any subscriptions yet.</div>
           <div v-for="sub in sortedSubscriptions" :key="sub.id" class="flex items-center" @click="openEditModal(sub)">
             <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-4" :style="{ backgroundColor: getCategoryColor(sub.category) }">
               <span class="text-white font-medium text-xl">{{ sub.name.charAt(0).toUpperCase() }}</span>
@@ -63,7 +63,7 @@
           <div class="p-4 space-y-2">
             <p class="text-sm uppercase tracking-widest font-medium" style="color: var(--muted);">Menu</p>
             <router-link to="/settings" @click="toggleMenu" class="menu-item">Settings</router-link>
-            <router-link to="/app-info" @click="toggleMenu" class="menu-item">О приложении</router-link>
+            <router-link to="/app-info" @click="toggleMenu" class="menu-item">App Info</router-link>
             <div class="border-t my-2" style="border-color: var(--border);"></div>
             <button @click="handleLogout" class="menu-item text-left" style="color: var(--accent);">Logout</button>
           </div>

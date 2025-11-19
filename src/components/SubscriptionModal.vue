@@ -9,7 +9,7 @@
             <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <h2 class="font-medium text-lg capitalize">{{ currentStep === 1 ? 'Add Subscription' : form.category }}</h2>
+        <h2 class="font-medium text-lg capitalize">{{ currentStep === 1 ? 'Add Subscription' : getCategoryTitle(form.category) }}</h2>
         <button @click="handleClose" class="p-2 rounded-full transition-colors hover:bg-black/5">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -38,7 +38,7 @@
         <!-- Step 2: Details Input -->
         <div v-if="currentStep === 2" class="flex flex-col h-full">
           <div class="text-center pt-8 pb-12 flex-shrink-0">
-            <p class="text-sm uppercase tracking-widest" style="color: var(--muted);">{{ form.category }}</p>
+            <p class="text-sm uppercase tracking-widest" style="color: var(--muted);">{{ getCategoryTitle(form.category) }}</p>
             <div class="flex items-center justify-center text-6xl font-light" style="font-family: 'Space Grotesk', monospace;">
               <span class="font-sans text-4xl align-middle mr-1">$</span>
               <input 
@@ -92,7 +92,7 @@
       <footer v-if="currentStep === 2" class="absolute bottom-0 left-0 right-0 p-4 bg-opacity-80 backdrop-blur-sm" style="background-color: var(--bg-base);">
         <div class="flex gap-3">
           <button v-if="subscription" @click="handleDelete" class="flex-1 btn-secondary" style="color: var(--accent);">Delete</button>
-          <button @click="handleSubmit" class="flex-1 btn-primary">Save Budget</button>
+          <button @click="handleSubmit" class="flex-1 btn-primary">Save Subscription</button>
         </div>
       </footer>
     </div>
@@ -194,6 +194,21 @@ const categories = ref<{id: Subscription['category'], name: string, budget: numb
   { id: 'shopping', name: 'Shopping', budget: 0.0, color: 'hsl(120, 12%, 55%)' },
   { id: 'other', name: 'Other', budget: 0.0, color: 'hsl(120, 12%, 65%)' },
 ])
+
+const getCategoryTitle = (category?: Subscription['category']): string => {
+  const map: Record<string, string> = {
+    streaming: 'Streaming',
+    music: 'Music',
+    games: 'Games',
+    education: 'Education',
+    health: 'Health',
+    work: 'Productivity',
+    financial: 'Finance',
+    shopping: 'Shopping',
+    other: 'Other',
+  }
+  return category ? (map[category] ?? 'Other') : 'Other'
+}
 
 function formatDateForInput(date: Date): string {
   const year = date.getFullYear()

@@ -33,7 +33,7 @@
         </div>
         <div class="text-center">
           <p class="font-medium text-lg" style="color: var(--bg-base);">{{ user?.email }}</p>
-          <p class="text-sm opacity-80">Your current account</p>
+          <p class="text-sm opacity-80">Current account</p>
         </div>
       </div>
 

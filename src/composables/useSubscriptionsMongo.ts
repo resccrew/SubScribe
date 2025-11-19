@@ -110,7 +110,7 @@ export function useSubscriptions() {
       subscriptions.value = Array.isArray(data) ? data.map(toSubscription) : []
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch subscriptions'
-      error.value = message.includes('AbortError') ? 'Превышено время ожидания загрузки' : message
+      error.value = message.includes('AbortError') ? 'Request timed out while loading' : message
       console.error('Error fetching subscriptions:', err)
     } finally {
       clearTimeout(timeout)
