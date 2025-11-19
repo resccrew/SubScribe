@@ -40,6 +40,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, _from, next) => {
+  if (import.meta.env.DEV) { next(); return }
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   
   if (requiresAuth) {

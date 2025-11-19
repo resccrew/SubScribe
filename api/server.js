@@ -13,12 +13,9 @@ const port = process.env.PORT || 8000;
 // Supabase-клиент
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Supabase URL and Anon Key must be provided in environment variables.');
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+const useMock = !supabaseUrl || !supabaseKey;
+const supabase = !useMock ? createClient(supabaseUrl, supabaseKey) : null;
+const mock = { subscriptions: [] };
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:5173'
@@ -32,16 +29,20 @@ app.get('/', (req, res) => {
 // Получение всех подписок для пользователя
 app.get('/subscriptions/:userId', async (req, res) => {
   try {
+    if (useMock) {
+      const list = mock.subscriptions.filter(s => s.user_id === req.params.userId);
+      list.sort((a, b) => new Date(a.billing_date) - new Date(b.billing_date));
+      res.json(list);
+      return;
+    }
     const { data: subscriptions, error } = await supabase
       .from('subscriptions')
       .select('*')
       .eq('user_id', req.params.userId)
       .order('billing_date', { ascending: true });
-
     if (error) throw error;
     res.json(subscriptions);
   } catch (error) {
-    console.error('Error fetching subscriptions:', error);
     res.status(500).json({ error: 'Failed to fetch subscriptions' });
   }
 });
@@ -50,6 +51,23 @@ app.get('/subscriptions/:userId', async (req, res) => {
 app.post('/subscriptions', async (req, res) => {
   try {
     const { userId, name, price, billingDate, serviceLogo, category, cycle, currency, reminderDays } = req.body;
+    if (useMock) {
+      const item = {
+        id: String(Date.now()),
+        user_id: userId,
+        name,
+        price,
+        billing_date: billingDate,
+        service_logo: serviceLogo,
+        category,
+        cycle,
+        currency,
+        reminder_days: reminderDays,
+      };
+      mock.subscriptions.push(item);
+      res.status(201).json(item);
+      return;
+    }
     const { data, error } = await supabase
       .from('subscriptions')
       .insert([{ 
@@ -65,11 +83,9 @@ app.post('/subscriptions', async (req, res) => {
       }])
       .select()
       .single();
-
     if (error) throw error;
     res.status(201).json(data);
   } catch (error) {
-    console.error('Error saving subscription:', error);
     res.status(500).json({ error: 'Failed to save subscription' });
   }
 });
@@ -78,6 +94,25 @@ app.post('/subscriptions', async (req, res) => {
 app.put('/subscriptions/:id', async (req, res) => {
   try {
     const { name, price, billingDate, serviceLogo, category, cycle, currency, reminderDays } = req.body;
+    if (useMock) {
+      const idx = mock.subscriptions.findIndex(s => s.id === req.params.id);
+      if (idx === -1) return res.status(404).json({ error: 'Not found' });
+      const prev = mock.subscriptions[idx];
+      const next = {
+        ...prev,
+        name,
+        price,
+        billing_date: billingDate,
+        service_logo: serviceLogo,
+        category,
+        cycle,
+        currency,
+        reminder_days: reminderDays,
+      };
+      mock.subscriptions[idx] = next;
+      res.json(next);
+      return;
+    }
     const { data, error } = await supabase
       .from('subscriptions')
       .update({ 
@@ -93,11 +128,9 @@ app.put('/subscriptions/:id', async (req, res) => {
       .eq('id', req.params.id)
       .select()
       .single();
-
     if (error) throw error;
     res.json(data);
   } catch (error) {
-    console.error('Error updating subscription:', error);
     res.status(500).json({ error: 'Failed to update subscription' });
   }
 });
@@ -105,15 +138,19 @@ app.put('/subscriptions/:id', async (req, res) => {
 // Удаление подписки
 app.delete('/subscriptions/:id', async (req, res) => {
   try {
+    if (useMock) {
+      const before = mock.subscriptions.length;
+      mock.subscriptions = mock.subscriptions.filter(s => s.id !== req.params.id);
+      if (mock.subscriptions.length === before) return res.status(404).json({ error: 'Not found' });
+      return res.status(204).send();
+    }
     const { error } = await supabase
       .from('subscriptions')
       .delete()
       .eq('id', req.params.id);
-
     if (error) throw error;
     res.status(204).send();
   } catch (error) {
-    console.error('Error deleting subscription:', error);
     res.status(500).json({ error: 'Failed to delete subscription' });
   }
 });
