@@ -102,6 +102,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { Subscription } from '@/types/subscription'
+import { CATEGORY_COLOR_MAP } from '@/types/subscription'
 
 interface Props {
   show: boolean
@@ -184,15 +185,15 @@ const endDrag = () => {
 }
 
 const categories = ref<{id: Subscription['category'], name: string, budget: number, color: string}[]>([
-  { id: 'streaming', name: 'Streaming', budget: 0.0, color: 'hsl(120, 12%, 30%)' },
-  { id: 'music', name: 'Music', budget: 0.0, color: 'hsl(120, 12%, 40%)' },
-  { id: 'games', name: 'Games', budget: 0.0, color: 'hsl(120, 12%, 50%)' },
-  { id: 'education', name: 'Education', budget: 0.0, color: 'hsl(120, 12%, 60%)' },
-  { id: 'health', name: 'Health', budget: 0.0, color: 'hsl(120, 12%, 70%)' },
-  { id: 'work', name: 'Productivity', budget: 0.0, color: 'hsl(120, 12%, 35%)' },
-  { id: 'financial', name: 'Finance', budget: 0.0, color: 'hsl(120, 12%, 45%)' },
-  { id: 'shopping', name: 'Shopping', budget: 0.0, color: 'hsl(120, 12%, 55%)' },
-  { id: 'other', name: 'Other', budget: 0.0, color: 'hsl(120, 12%, 65%)' },
+  { id: 'streaming', name: 'Streaming', budget: 0.0, color: CATEGORY_COLOR_MAP.streaming },
+  { id: 'music', name: 'Music', budget: 0.0, color: CATEGORY_COLOR_MAP.music },
+  { id: 'games', name: 'Games', budget: 0.0, color: CATEGORY_COLOR_MAP.games },
+  { id: 'education', name: 'Education', budget: 0.0, color: CATEGORY_COLOR_MAP.education },
+  { id: 'health', name: 'Health', budget: 0.0, color: CATEGORY_COLOR_MAP.health },
+  { id: 'work', name: 'Productivity', budget: 0.0, color: CATEGORY_COLOR_MAP.work },
+  { id: 'financial', name: 'Finance', budget: 0.0, color: CATEGORY_COLOR_MAP.financial },
+  { id: 'shopping', name: 'Shopping', budget: 0.0, color: CATEGORY_COLOR_MAP.shopping },
+  { id: 'other', name: 'Other', budget: 0.0, color: CATEGORY_COLOR_MAP.other },
 ])
 
 const getCategoryTitle = (category?: Subscription['category']): string => {

@@ -35,17 +35,8 @@ const NUM_BARS = 120;
 const size = 280;
 const innerRadius = 40;
 const maxBarLength = (size / 2) - innerRadius - 10;
-const colorMap: Record<string, string> = {
-  streaming: 'hsl(210, 80%, 50%)',
-  music: 'hsl(270, 65%, 55%)',
-  games: 'hsl(0, 70%, 55%)',
-  education: 'hsl(30, 85%, 55%)',
-  health: 'hsl(140, 50%, 45%)',
-  work: 'hsl(190, 60%, 45%)',
-  financial: 'hsl(50, 90%, 50%)',
-  shopping: 'hsl(330, 70%, 55%)',
-  other: 'hsl(120, 12%, 65%)',
-}
+import { CATEGORY_COLOR_MAP } from '@/types/subscription'
+const colorMap: Record<string, string> = CATEGORY_COLOR_MAP
 
 const bars = computed(() => {
   const subs = props.subscriptions;
