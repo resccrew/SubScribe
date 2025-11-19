@@ -64,6 +64,7 @@
             <p class="text-sm uppercase tracking-widest font-medium" style="color: var(--muted);">Menu</p>
             <router-link to="/settings" @click="toggleMenu" class="menu-item">Settings</router-link>
             <router-link to="/app-info" @click="toggleMenu" class="menu-item">App Info</router-link>
+            <button @click="toggleTheme" class="menu-item text-left">Dark Mode: {{ currentThemeLabel }}</button>
             <div class="border-t my-2" style="border-color: var(--border);"></div>
             <button @click="handleLogout" class="menu-item text-left" style="color: var(--accent);">Logout</button>
           </div>
@@ -118,10 +119,28 @@ const editingSubscription = ref<Subscription | null>(null)
 
 const router = useRouter()
 const isMenuOpen = ref(false)
+const theme = ref<'light' | 'dark'>('light')
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
+
+const applyTheme = (t: 'light' | 'dark') => {
+  document.documentElement.classList.toggle('theme-dark', t === 'dark')
+  const meta = document.querySelector('meta[name="theme-color"]')
+  if (meta) {
+    const styles = getComputedStyle(document.documentElement)
+    meta.setAttribute('content', styles.getPropertyValue('--bg-page').trim())
+  }
+}
+
+const toggleTheme = () => {
+  theme.value = theme.value === 'dark' ? 'light' : 'dark'
+  localStorage.setItem('theme', theme.value)
+  applyTheme(theme.value)
+}
+
+const currentThemeLabel = computed(() => theme.value === 'dark' ? 'On' : 'Off')
 
 const handleLogout = async () => {
   try {
@@ -262,6 +281,9 @@ const handleDeleteSubscription = async (id: string) => {
 
 // Fetch subscriptions when the component is mounted or the user changes
 onMounted(() => {
+  const savedTheme = (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
+  theme.value = savedTheme
+  applyTheme(savedTheme)
   watch(user, (currentUser) => {
     if (currentUser?.uid) {
       fetchSubscriptions(currentUser.uid)
