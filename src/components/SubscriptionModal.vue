@@ -205,12 +205,15 @@ function formatDateForInput(date: Date): string {
 watch(() => props.show, (newShow) => {
   if (newShow) {
     if (props.subscription) {
+      const bdRaw: any = (props.subscription as any).billingDate ?? (props.subscription as any).billing_date
+      const bd = bdRaw ? new Date(bdRaw) : undefined
+      const bdValid = bd && !isNaN(bd.getTime()) ? bd : new Date()
       form.value = {
         name: props.subscription.name,
         price: props.subscription.price,
         currency: props.subscription.currency,
         cycle: props.subscription.cycle,
-        billingDate: formatDateForInput(new Date(props.subscription.billingDate)),
+        billingDate: formatDateForInput(bdValid),
         reminderDays: props.subscription.reminderDays,
         category: props.subscription.category || 'other'
       }

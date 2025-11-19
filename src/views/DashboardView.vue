@@ -160,8 +160,9 @@ const formatPrice = (price: number) => {
 
 // Formats date to a readable string like "Next on Jun 23"
 const formatDate = (dateString: string | Date) => {
-    const date = new Date(dateString);
-    return `Next on ${new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date)}`;
+    const date = new Date(dateString as any)
+    if (isNaN(date.getTime())) return 'Date not set'
+    return `Next on ${new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date)}`
 }
 
 const getCategoryName = (category?: string): string => {

@@ -14,14 +14,17 @@ export function useSubscriptions() {
   const categories = ref<Category[]>([])
 
   const toSubscription = (doc: any): Subscription => {
+    const bd = doc.billingDate ?? doc.billing_date
+    const bdDate = bd ? new Date(bd) : undefined
+    const safeBd = bdDate && !isNaN(bdDate.getTime()) ? bdDate : undefined
     return {
       id: doc.id ?? (doc._id ? String(doc._id) : undefined),
-      userId: String(doc.userId),
-      name: String(doc.name),
-      price: Number(doc.price),
+      userId: String(doc.userId ?? doc.user_id ?? ''),
+      name: String(doc.name ?? ''),
+      price: Number(doc.price ?? 0),
       currency: doc.currency,
       cycle: doc.cycle,
-      billingDate: new Date(doc.billingDate),
+      billingDate: safeBd as any,
       reminderDays: doc.reminderDays ?? 3,
       category: doc.category,
       createdAt: doc.createdAt ? new Date(doc.createdAt) : undefined,
