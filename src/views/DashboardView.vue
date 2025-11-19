@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen p-6" style="background-color: var(--bg-page); color: var(--text-main);" :style="{ transform: isMenuOpen ? 'translateX(-7rem)' : 'none', transition: 'transform 0.25s ease', paddingRight: isMenuOpen ? '0' : undefined }">
+  <div class="min-h-screen p-6" style="background-color: var(--bg-page); color: var(--text-main);" :style="{ transition: 'transform 0.25s ease' }">
     <!-- Header: Avatar + Menu Icon -->
     <header class="flex justify-between items-center mb-10">
       <div class="w-10 h-10 rounded-full bg-gray-300">
@@ -58,7 +58,7 @@
     
     <!-- Side Drawer Menu -->
     <transition name="drawer">
-      <div v-if="isMenuOpen" class="fixed inset-0 z-50" @click.self="toggleMenu" style="background-color: rgba(0,0,0,0.18);">
+      <div v-if="isMenuOpen" class="fixed inset-0 z-50" @click.self="toggleMenu" style="background-color: transparent;">
         <aside class="fixed right-0 top-0 h-full w-64 drawer-panel" style="background-color: var(--bg-paper); border-color: var(--border);">
           <div class="menu-header">MENU</div>
           <nav class="menu-list">
